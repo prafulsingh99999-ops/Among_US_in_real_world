@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMONG US: Real Life Edition | SPARK - IIIT Bhopal</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: VT323 (Retro Terminal), Orbitron (Futuristic HUD), Outfit (Clean Modern) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Outfit:wght@400;600;700;900&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome / Lucide icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            amongRed: '#C51111',
+            amongRedDark: '#7A0838',
+            amongCyan: '#38FEDC',
+            amongCyanDark: '#24989E',
+            amongBlue: '#132ED1',
+            amongLime: '#50EF39',
+            amongYellow: '#F6F657',
+            amongOrange: '#ED54BA',
+            spaceDark: '#030712',
+            hudBorder: '#1E293B',
+            sparkGold: '#F59E0B'
+          },
+          fontFamily: {
+            orbitron: ['Orbitron', 'sans-serif'],
+            vt323: ['VT323', 'monospace'],
+            retro: ['"Press Start 2P"', 'monospace'],
+            sans: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#030712] text-slate-100 font-sans min-h-screen overflow-x-hidden selection:bg-red-600 selection:text-white">
+
+  <!-- ===================================================================== -->
+  <!-- FULLSCREEN INTERACTIVE EMERGENCY BUZZER & MEETING INTRO OVERLAY       -->
+  <!-- ===================================================================== -->
+  <div id="introExperience" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-slate-950 select-none overflow-hidden transition-all duration-700">
+    
+    <!-- Top HUD Bar: Skip Intro & Mission Ticker -->
+    <div class="absolute top-0 inset-x-0 z-30 p-4 sm:p-6 flex items-center justify-between pointer-events-auto">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+        <span class="font-orbitron font-bold text-xs text-red-400 tracking-wider hidden sm:inline">SPARK IIITB • CAFETERIA CONSOLE</span>
+      </div>
+      <button id="skipIntroBtn" class="bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 font-orbitron text-xs font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 active:scale-95 shadow-lg">
+        <span>SKIP INTRO</span>
+        <i class="fa-solid fa-forward-step"></i>
+      </button>
+    </div>
+
+    <!-- STAGE 1: THE EMERGENCY BUZZER UNIT -->
+    <div id="introStageBuzzer" class="relative z-20 flex flex-col items-center justify-center text-center px-4 max-w-xl w-full">
+      
+      <!-- Top Instruction Banner -->
+      <div class="mb-6 sm:mb-8 space-y-2">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-red-950/80 border border-red-500/40 text-red-400 text-[11px] font-orbitron tracking-widest uppercase">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>EMERGENCY DISPATCH UNIT</span>
+        </div>
+        <h2 id="buzzerPromptText" class="text-xl sm:text-2xl md:text-3xl font-orbitron font-black text-white tracking-wide uppercase">
+          STEP 1 OF 2: TAP PROTECTIVE CASE TO OPEN
+        </h2>
+        <p id="buzzerSubPromptText" class="text-xs sm:text-sm text-cyan-300 font-mono">
+          👉 <span class="underline font-bold">CLICK THE GLASS LID</span> TO UNLOCK THE EMERGENCY BUTTON
+        </p>
+      </div>
+
+      <!-- The 3D Buzzer Pedestal & Interactive Button Unit -->
+      <div class="relative w-72 h-72 sm:w-88 sm:h-88 flex items-center justify-center buzzer-perspective my-2">
+        
+        <!-- Outer Pedestal Ring with Hazard Stripes -->
+        <div class="absolute inset-0 rounded-full hazard-stripes border-8 border-slate-900 shadow-[0_25px_60px_rgba(0,0,0,0.9)] flex items-center justify-center p-5">
+          
+          <!-- Inner Recessed Steel Well -->
+          <div class="w-full h-full rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-4 border-slate-800 shadow-inner flex items-center justify-center relative p-4">
+            
+            <!-- Bolts around rim -->
+            <div class="absolute top-2 w-3 h-3 rounded-full bg-slate-400 border border-black shadow"></div>
+            <div class="absolute bottom-2 w-3 h-3 rounded-full bg-slate-400 border border-black shadow"></div>
+            <div class="absolute left-2 w-3 h-3 rounded-full bg-slate-400 border border-black shadow"></div>
+            <div class="absolute right-2 w-3 h-3 rounded-full bg-slate-400 border border-black shadow"></div>
+
+            <!-- Big Red Dome Button (Inside well) -->
+            <button id="buzzerButton" class="relative z-10 w-44 h-44 sm:w-52 sm:h-52 rounded-full buzzer-button flex flex-col items-center justify-center p-3 select-none active:scale-95 group focus:outline-none" title="Open protective cover first!">
+              <i class="fa-solid fa-bell text-white text-3xl sm:text-4xl drop-shadow mb-1 group-hover:scale-110 transition-transform"></i>
+              <span class="font-orbitron font-black text-white text-xs sm:text-sm tracking-wider uppercase drop-shadow">
+                EMERGENCY
+              </span>
+              <span class="text-[9px] font-mono text-red-200 uppercase tracking-tighter">
+                PRESS TO CALL
+              </span>
+            </button>
+
+            <!-- 3D Protective Transparent Glass Case (Lid) -->
+            <div id="buzzerLid" class="buzzer-lid absolute inset-4 rounded-full flex flex-col items-center justify-between p-3 cursor-pointer z-30 select-none group" title="Click to lift open protective lid!">
+              
+              <!-- Metal Hinge at Top -->
+              <div class="w-16 h-4 bg-slate-400 border-2 border-slate-900 rounded-b-md shadow-md flex items-center justify-around px-2">
+                <div class="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
+                <div class="w-1.5 h-1.5 rounded-full bg-slate-800"></div>
+              </div>
+
+              <!-- Warning text on glass -->
+              <div class="bg-yellow-400 text-slate-950 font-orbitron font-black text-[9px] sm:text-[10px] px-3 py-0.5 rounded border border-black shadow-md tracking-wider uppercase">
+                ⚠️ LIFT COVER BEFORE PRESSING
+              </div>
+
+              <!-- Hand pointer hint at bottom -->
+              <div class="w-7 h-7 rounded-full bg-white/20 border border-white/50 flex items-center justify-center text-white text-xs animate-bounce shadow">
+                <i class="fa-solid fa-hand-pointer"></i>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Footer Info -->
+      <div class="mt-6 font-mono text-[11px] text-slate-400 flex flex-wrap items-center justify-center gap-4">
+        <span>CONSOLE: CAFETERIA-MAIN</span>
+        <span>•</span>
+        <span class="text-amber-400">IIIT BHOPAL PROTOCOL 2026</span>
+      </div>
+
+    </div>
+
+    <!-- STAGE 2: RED ALERT SIREN / EMERGENCY CALLING INTERFACE -->
+    <div id="introStageAlert" class="hidden relative z-20 flex flex-col items-center justify-center text-center p-6 max-w-2xl w-full">
+      
+      <!-- Rotating Warning Sirens -->
+      <div class="relative w-40 h-40 sm:w-48 sm:h-48 flex items-center justify-center mb-6">
+        <div class="absolute inset-0 rounded-full border-4 border-dashed border-yellow-300 animate-spin" style="animation-duration: 6s;"></div>
+        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-yellow-400 border-4 border-black flex items-center justify-center text-black text-5xl sm:text-6xl shadow-[0_0_80px_rgba(250,204,21,1)] animate-bounce">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-retro text-yellow-300 tracking-wider uppercase drop-shadow-[0_8px_16px_rgba(0,0,0,0.9)] animate-pulse">
+        EMERGENCY<br>MEETING!
+      </h1>
+      
+      <div id="introAlertCounterBadge" class="mt-4 px-6 py-2 rounded-full bg-black/80 border-2 border-yellow-400 text-yellow-400 font-orbitron font-black text-sm sm:text-base tracking-widest uppercase shadow-lg">
+        SIREN ALERT 1 OF 3
+      </div>
+
+      <div id="introAlertStatusText" class="mt-6 text-white font-mono text-xs sm:text-sm tracking-wider uppercase animate-pulse">
+        ALARM 1: EMERGENCY MEETING TRIGGERED!
+      </div>
+
+    </div>
+
+    <!-- STAGE 3: THE EMERGENCY MEETING CONVERSATION -->
+    <div id="introStageMeeting" class="hidden relative z-20 flex flex-col items-center justify-center w-full h-full max-w-full p-2 select-none overflow-hidden cursor-pointer">
+      
+      <!-- Responsive Scale Wrapper -->
+      <div id="sceneContainer" class="relative flex flex-col items-center justify-center">
+        
+        <div class="scene" id="meetingScene">
+          <div class="dialogue-wrapper">
+            <div class="dialogue-box" id="dialogueBox">
+              <div class="character-name" id="charName" style="color: #c51111;">SYSTEM</div>
+              <div id="dialogueText">Click anywhere to start the EMERGENCY MEETING!</div>
+            </div>
+          </div>
+          
+          <div class="table"></div>
+          
+          <div class="crewmate" id="red"><div class="visor"></div></div>
+          <div class="crewmate" id="blue"><div class="visor"></div></div>
+          <div class="crewmate" id="green"><div class="visor"></div></div>
+          <div class="crewmate" id="yellow"><div class="visor"></div></div>
+          <div class="crewmate" id="purple"><div class="visor"></div></div>
+          <div class="crewmate" id="pink"><div class="visor"></div></div>
+        </div>
+
+      </div>
+
+      <div class="instruction pointer-events-none" id="meetingInstruction">CLICK TO CONTINUE</div>
+
+      <!-- Meeting Adjourned Action Bar -->
+      <div id="meetingFooterBar" class="hidden absolute bottom-5 z-40 w-full max-w-md px-4 text-center pointer-events-auto">
+        <button id="enterSiteBtn" class="w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-emerald-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-orbitron font-black text-sm sm:text-base py-3 px-6 rounded-2xl border-2 border-white shadow-[0_0_30px_rgba(16,185,129,0.7)] transition-all flex items-center justify-center gap-3 active:scale-95 uppercase cursor-pointer">
+          <i class="fa-solid fa-door-open text-lg"></i>
+          <span>ENTER SHIP / GO TO REGISTRATION</span>
+          <span id="meetingAutoTimer" class="bg-black/40 text-white text-xs px-2 py-0.5 rounded font-mono">5s</span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Live Space Canvas Background -->
+  <canvas id="spaceCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- Ambient CRT Scanline Overlay -->
+  <div class="fixed inset-0 pointer-events-none z-10 scanlines opacity-30"></div>
+
+  <!-- Audio Control Floating Bar -->
+  <div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 px-4 py-2.5 rounded-full shadow-2xl shadow-cyan-500/20">
+    <button id="toggleAudioBtn" class="flex items-center gap-2.5 text-xs font-orbitron font-bold tracking-wider text-cyan-400 hover:text-cyan-300 transition-colors">
+      <span class="relative flex h-3 w-3">
+        <span id="audioPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+      </span>
+      <i id="audioIcon" class="fa-solid fa-volume-high text-sm"></i>
+      <span id="audioStatusText">SFX: ON</span>
+    </button>
+    <div class="h-4 w-px bg-slate-700"></div>
+    <button id="playShhBtn" title="Play Shh Theme" class="text-xs text-slate-400 hover:text-red-400 transition-colors">
+      🤫 SHH!
+    </button>
+  </div>
+
+  <!-- Top Announcement Ticker -->
+  <div class="relative z-20 bg-gradient-to-r from-red-950/90 via-slate-900/90 to-red-950/90 border-b border-red-500/30 backdrop-blur-md py-1.5 px-4 text-xs font-orbitron text-center flex items-center justify-between text-red-300">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+      <span class="tracking-widest font-black uppercase text-red-400">STATUS: RED ALERT</span>
+      <span class="hidden md:inline text-slate-400">|</span>
+      <span class="hidden md:inline text-slate-300">ANOMALIES REPORTED ACROSS IIIT BHOPAL CAMPUS</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-amber-400 font-bold hidden sm:inline">⚡ SPARK SPECIAL OPERATIONS</span>
+      <span class="bg-red-600/30 border border-red-500 text-red-300 px-2 py-0.5 rounded text-[10px] uppercase font-bold animate-pulse">
+        2 IMPOSTORS DETECTED
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Navigation HUD -->
+  <header class="relative z-20 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/80 sticky top-0 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Logo & Society Identity -->
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="relative w-12 h-12 flex items-center justify-center bg-gradient-to-br from-amber-500/20 to-red-600/30 rounded-xl border border-amber-500/40 p-1 group-hover:scale-105 transition-transform duration-300 shadow-lg shadow-amber-500/10">
+          <svg class="w-8 h-8 text-amber-400 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-orbitron font-black text-xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-red-500">
+              SPARK
+            </span>
+            <span class="text-[10px] bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono font-bold px-1.5 py-0.2 rounded">
+              IIIT BHOPAL
+            </span>
+          </div>
+          <p class="text-[10px] text-slate-400 tracking-tighter uppercase font-medium line-clamp-1">
+            Programming • Automation • Robotics • Research • Knowledge
+          </p>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-8 font-orbitron text-xs tracking-wider">
+        <a href="#briefing" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-satellite-dish text-cyan-400 text-[10px]"></i> BRIEFING
+        </a>
+        <a href="#campus-map" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-map-location-dot text-cyan-400 text-[10px]"></i> SKELD MAP
+        </a>
+        <a href="#task-terminal" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-microchip text-cyan-400 text-[10px]"></i> TASK TERMINAL
+        </a>
+        <a href="#customizer" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-user-astronaut text-cyan-400 text-[10px]"></i> CREWMATE LAB
+        </a>
+        <a href="#rules" class="text-slate-300 hover:text-cyan-400 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-halved text-cyan-400 text-[10px]"></i> RULES
+        </a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-3">
+        <!-- Replay Intro Button -->
+        <button class="replay-intro-btn bg-slate-800/90 hover:bg-slate-700 text-amber-400 font-orbitron font-bold text-xs px-3 py-2.5 rounded-lg border border-amber-500/40 shadow transition-all flex items-center gap-1.5 active:scale-95" title="Replay Emergency Meeting Intro Cutscene">
+          <i class="fa-solid fa-rotate-right text-xs"></i>
+          <span class="hidden xl:inline">REPLAY INTRO</span>
+        </button>
+
+        <!-- Emergency Button Header Quick Trigger -->
+        <button id="headerEmergencyBtn" class="relative group bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-orbitron font-black text-xs px-4 py-2.5 rounded-lg border-2 border-red-400 shadow-lg shadow-red-600/40 transition-all duration-300 flex items-center gap-2 active:scale-95">
+          <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span class="hidden sm:inline">EMERGENCY</span>
+        </button>
+
+        <a href="#register" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-orbitron font-bold text-xs px-4 py-2.5 rounded-lg border border-cyan-300 shadow-lg shadow-cyan-500/20 transition-all duration-300 flex items-center gap-1.5 active:scale-95">
+          <i class="fa-solid fa-id-card"></i>
+          <span>GET PASS</span>
+        </a>
+
+        <!-- Mobile Menu Toggle -->
+        <button id="mobileMenuBtn" class="lg:hidden text-slate-300 hover:text-white p-2">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-slate-950/95 border-b border-slate-800 px-6 py-4 font-orbitron text-sm space-y-3">
+      <button class="replay-intro-btn w-full text-left py-2 text-amber-400 font-bold border-b border-slate-900 flex items-center gap-2">
+        <i class="fa-solid fa-rotate-right text-xs"></i> REPLAY INTRO CUTSCENE
+      </button>
+      <a href="#briefing" class="block py-2 text-slate-300 hover:text-cyan-400 border-b border-slate-900">BRIEFING</a>
+      <a href="#campus-map" class="block py-2 text-slate-300 hover:text-cyan-400 border-b border-slate-900">CAMPUS MAP</a>
+      <a href="#task-terminal" class="block py-2 text-slate-300 hover:text-cyan-400 border-b border-slate-900">TASK TERMINAL</a>
+      <a href="#customizer" class="block py-2 text-slate-300 hover:text-cyan-400 border-b border-slate-900">CREWMATE LAB</a>
+      <a href="#rules" class="block py-2 text-slate-300 hover:text-cyan-400 border-b border-slate-900">SURVIVAL RULES</a>
+      <a href="#register" class="block py-2 text-cyan-400 font-bold">JOIN MISSION & GET ID</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative z-20 min-h-[90vh] flex flex-col justify-center items-center text-center px-4 pt-12 pb-20 overflow-hidden">
+    
+    <!-- Floating Space Astronaut Decors -->
+    <div class="absolute left-6 top-1/4 hidden xl:block animate-float-slow pointer-events-none opacity-80" id="heroFloatRed">
+      <!-- Injected by JS or crewmate SVG -->
+    </div>
+    <div class="absolute right-8 top-1/3 hidden xl:block animate-float-reverse pointer-events-none opacity-80" id="heroFloatCyan">
+      <!-- Injected by JS or crewmate SVG -->
+    </div>
+
+    <!-- Spark Society Sub-header -->
+    <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-900/80 border border-amber-500/40 text-amber-400 text-xs font-orbitron tracking-widest uppercase mb-6 shadow-lg shadow-amber-500/10">
+      <i class="fa-solid fa-atom text-amber-400 animate-spin" style="animation-duration: 8s;"></i>
+      <span>SPARK SOCIETY PRESENTS</span>
+      <span class="text-slate-500">•</span>
+      <span class="text-slate-300">REAL LIVE AMONG US 2026</span>
+    </div>
+
+    <!-- Main Game Title Banner -->
+    <div class="relative max-w-5xl mx-auto mb-6">
+      <h1 class="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-orbitron font-black tracking-tight text-white uppercase drop-shadow-[0_10px_35px_rgba(239,68,68,0.5)]">
+        AM<span class="inline-block relative">
+          <span class="text-red-500">O</span>
+          <!-- Mini Visor inside the O -->
+          <span class="absolute top-1/3 left-1/4 w-1/2 h-1/3 bg-cyan-300 rounded-full border border-black shadow-inner"></span>
+        </span>NG US
+      </h1>
+      <div class="mt-2 text-2xl sm:text-4xl md:text-5xl font-retro text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-yellow-400 to-amber-500 tracking-wider">
+        REAL LIFE EDITION
+      </div>
+      <p class="mt-4 text-slate-300 max-w-2xl mx-auto text-base sm:text-lg font-medium leading-relaxed">
+        The legendary social deduction game breaks out of cyberspace into the physical grounds of 
+        <strong class="text-cyan-400 font-semibold">IIIT Bhopal</strong>. Survive the tasks, detect the impostors, or sabotage the crew!
+      </p>
+    </div>
+
+    <!-- Event Key Details Banner -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl w-full mx-auto my-6 p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 backdrop-blur-md shadow-2xl">
+      <!-- Venue -->
+      <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-800/50 border border-slate-700/40 text-left">
+        <div class="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xl shrink-0">
+          <i class="fa-solid fa-location-dot"></i>
+        </div>
+        <div>
+          <span class="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">Mission Venue</span>
+          <span class="font-bold text-white text-sm sm:text-base">IIIT Bhopal Campus</span>
+          <span class="text-[11px] text-cyan-400 block font-mono">Ground Zero & Labs</span>
+        </div>
+      </div>
+
+      <!-- Date -->
+      <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-800/50 border border-slate-700/40 text-left">
+        <div class="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 text-xl shrink-0">
+          <i class="fa-solid fa-calendar-days"></i>
+        </div>
+        <div>
+          <span class="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">Ejection Date</span>
+          <span class="font-bold text-white text-sm sm:text-base">22nd November 2026</span>
+          <span class="text-[11px] text-amber-400 block font-mono">Sunday Morning</span>
+        </div>
+      </div>
+
+      <!-- Time -->
+      <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-800/50 border border-slate-700/40 text-left">
+        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-xl shrink-0">
+          <i class="fa-solid fa-clock"></i>
+        </div>
+        <div>
+          <span class="text-[11px] font-orbitron uppercase tracking-wider text-slate-400 block">Gate Lift-off</span>
+          <span class="font-bold text-white text-sm sm:text-base">10:00 AM Onwards</span>
+          <span class="text-[11px] text-lime-400 block font-mono">Reporting at 9:30 AM</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countdown Timer to Nov 22, 2026 10:00 IST -->
+    <div class="max-w-3xl w-full mx-auto my-4 bg-slate-950/90 border border-cyan-500/30 rounded-2xl p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+      <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-red-500/10 rounded-full blur-2xl"></div>
+      
+      <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+        <div class="flex items-center gap-2 font-orbitron text-xs text-cyan-400 tracking-wider">
+          <i class="fa-solid fa-stopwatch text-cyan-400 animate-pulse"></i>
+          <span>COUNTDOWN TO SHIP LAUNCH</span>
+        </div>
+        <span class="text-[11px] font-mono text-slate-400">TARGET: 22-NOV-2026 10:00:00 IST</span>
+      </div>
+
+      <div class="grid grid-cols-4 gap-2 sm:gap-4 font-mono text-center">
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <div id="countDays" class="text-3xl sm:text-5xl font-black text-white font-orbitron">00</div>
+          <div class="text-[10px] sm:text-xs text-slate-400 font-orbitron uppercase mt-1 tracking-widest">Days</div>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <div id="countHours" class="text-3xl sm:text-5xl font-black text-cyan-400 font-orbitron">00</div>
+          <div class="text-[10px] sm:text-xs text-slate-400 font-orbitron uppercase mt-1 tracking-widest">Hours</div>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <div id="countMinutes" class="text-3xl sm:text-5xl font-black text-amber-400 font-orbitron">00</div>
+          <div class="text-[10px] sm:text-xs text-slate-400 font-orbitron uppercase mt-1 tracking-widest">Minutes</div>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 sm:p-4">
+          <div id="countSeconds" class="text-3xl sm:text-5xl font-black text-red-500 font-orbitron">00</div>
+          <div class="text-[10px] sm:text-xs text-slate-400 font-orbitron uppercase mt-1 tracking-widest">Seconds</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero CTA Buttons & Big Emergency Button -->
+    <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6">
+      
+      <!-- Big Emergency Meeting Button -->
+      <button id="heroEmergencyMeetingBtn" class="group relative flex items-center justify-center active:scale-95 transition-all">
+        <div class="absolute -inset-3 bg-red-600 rounded-full opacity-60 group-hover:opacity-100 blur-lg transition duration-500 animate-pulse"></div>
+        <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-b from-red-500 via-red-600 to-red-900 border-4 border-yellow-400 shadow-[0_10px_25px_rgba(220,38,38,0.7)] flex flex-col items-center justify-center text-center p-2 cursor-pointer transform group-hover:scale-105 transition-all">
+          <i class="fa-solid fa-bell text-white text-2xl sm:text-3xl mb-1 animate-bounce"></i>
+          <span class="font-orbitron font-black text-[10px] sm:text-xs text-white uppercase leading-tight tracking-tighter">
+            EMERGENCY<br>MEETING
+          </span>
+        </div>
+      </button>
+
+      <div class="flex flex-col gap-3 text-left">
+        <a href="#register" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-orbitron font-black text-sm sm:text-base px-8 py-4 rounded-xl border border-cyan-300 shadow-xl shadow-cyan-500/30 transition-all flex items-center justify-center gap-3">
+          <i class="fa-solid fa-rocket text-lg"></i>
+          <span>REGISTER FOR MISSION</span>
+        </a>
+        <a href="#task-terminal" class="bg-slate-900/80 hover:bg-slate-800 text-white font-orbitron font-bold text-xs sm:text-sm px-6 py-3 rounded-xl border border-slate-700 transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-gamepad text-amber-400"></i>
+          <span>TEST CREWMATE SKILLS (MINI-GAMES)</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Walking Crewmates Marquee Banner -->
+    <div class="w-full mt-16 overflow-hidden border-y border-slate-800/60 bg-slate-950/40 py-3 relative">
+      <div id="crewmateMarquee" class="flex items-center gap-16 whitespace-nowrap animate-marquee">
+        <!-- Dynamically populated with walking SVG crewmates -->
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Section 2: Mission Briefing & The Story -->
+  <section id="briefing" class="relative z-20 py-20 px-4 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-red-500 font-orbitron text-xs font-bold tracking-widest uppercase">CLASSIFIED TRANSMISSION</span>
+      <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-2 mb-4">
+        OPERATION SKELD: BHOPAL
+      </h2>
+      <div class="w-24 h-1 bg-red-600 mx-auto rounded-full"></div>
+      <p class="text-slate-300 mt-4 leading-relaxed">
+        SPARK Society has transformed IIIT Bhopal Campus into an automated interstellar research cruiser. 
+        As crewmates, your objective is to maintain campus security and complete real hardware and logic tasks. 
+        However, shape-shifting impostors walk among us!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Feature Card 1 -->
+      <div class="bg-slate-900/60 border border-slate-800 hover:border-cyan-500/50 rounded-2xl p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 group shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Automated Hardware Tasks</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Powered by SPARK's Robotics & Automation division: Physical RFID scanners, Arduino-based wire patching stations, and digital keypad locks placed all across the college.
+        </p>
+        <div class="mt-4 pt-4 border-t border-slate-800 flex items-center text-xs font-orbitron text-cyan-400">
+          <span>TASK TYPE: PHYSICAL & DIGITAL</span>
+        </div>
+      </div>
+
+      <!-- Feature Card 2 -->
+      <div class="bg-slate-900/60 border border-slate-800 hover:border-red-500/50 rounded-2xl p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 group shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center text-red-500 text-2xl mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-skull"></i>
+        </div>
+        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Real-Life Sabotage & Kills</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          Impostors use stealth NFC tags, coded kill-stickers, and campus blackouts to eliminate crew members in dark corners. Watch your back when roaming near the labs!
+        </p>
+        <div class="mt-4 pt-4 border-t border-slate-800 flex items-center text-xs font-orbitron text-red-400">
+          <span>KILL COOLDOWN: 45 SECONDS</span>
+        </div>
+      </div>
+
+      <!-- Feature Card 3 -->
+      <div class="bg-slate-900/60 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-2 group shadow-xl">
+        <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+          <i class="fa-solid fa-gavel"></i>
+        </div>
+        <h3 class="text-xl font-orbitron font-bold text-white mb-2">Central Trial & Voting</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">
+          When a body is reported or the Emergency Buzzer rings, all surviving crew gather at the Central Courtyard. State your alibis, present proof, and vote suspects into ejection!
+        </p>
+        <div class="mt-4 pt-4 border-t border-slate-800 flex items-center text-xs font-orbitron text-amber-400">
+          <span>VENUE: CENTRAL ASSEMBLY</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 3: Interactive IIIT Bhopal Campus Map (The Skeld IIITB Edition) -->
+  <section id="campus-map" class="relative z-20 py-20 px-4 bg-slate-950/60 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="text-cyan-400 font-orbitron text-xs font-bold tracking-widest uppercase">NAVIGATIONAL RADAR</span>
+          <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-1">
+            IIIT BHOPAL: SKELD SECTORS
+          </h2>
+          <p class="text-slate-400 text-sm max-w-xl mt-2">
+            Click on any sector room on the blueprint below to inspect live camera feeds, assigned IRL tasks, and hazard ratings.
+          </p>
+        </div>
+        <div class="mt-4 md:mt-0 flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-orbitron text-xs text-emerald-400 uppercase font-bold">RADAR ONLINE: 6 ZONES MONITORED</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Interactive Map Graphic (Grid of Ship Rooms) -->
+        <div class="lg:col-span-8 bg-slate-900/90 border-2 border-slate-700/80 rounded-3xl p-6 sm:p-8 backdrop-blur-xl relative overflow-hidden shadow-2xl">
+          <!-- Grid lines for blueprint look -->
+          <div class="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:2.5rem_2.5rem] opacity-40"></div>
+          
+          <div class="relative z-10 grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+            
+            <!-- Room 1: Cafeteria -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-amber-500/50 hover:border-amber-400 hover:bg-amber-950/30 transition-all duration-300 group relative" data-room="cafeteria">
+              <span class="absolute top-2 right-2 flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+              </span>
+              <div class="text-amber-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-mug-hot"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">CAFETERIA</div>
+              <div class="text-[11px] text-amber-300/80 font-mono">College Canteen / Lawn</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Empty Garbage & Buzzer</div>
+            </button>
+
+            <!-- Room 2: Electrical -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-red-500/50 hover:border-red-400 hover:bg-red-950/30 transition-all duration-300 group relative" data-room="electrical">
+              <span class="absolute top-2 right-2 flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+              </span>
+              <div class="text-red-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-bolt"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">ELECTRICAL</div>
+              <div class="text-[11px] text-red-300/80 font-mono">Robotics & IoT Lab</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Fix Wires & Divert Power</div>
+            </button>
+
+            <!-- Room 3: MedBay -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-950/30 transition-all duration-300 group relative" data-room="medbay">
+              <div class="text-cyan-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">MEDBAY</div>
+              <div class="text-[11px] text-cyan-300/80 font-mono">Student Health Wing</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Biometric Body Scan</div>
+            </button>
+
+            <!-- Room 4: Admin & Navigation -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-purple-500/50 hover:border-purple-400 hover:bg-purple-950/30 transition-all duration-300 group relative" data-room="admin">
+              <div class="text-purple-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-id-badge"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">ADMIN</div>
+              <div class="text-[11px] text-purple-300/80 font-mono">Main Admin Block</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Swipe Card & Upload Data</div>
+            </button>
+
+            <!-- Room 5: Security / CCTV -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-emerald-500/50 hover:border-emerald-400 hover:bg-emerald-950/30 transition-all duration-300 group relative" data-room="security">
+              <div class="text-emerald-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-video"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">SECURITY</div>
+              <div class="text-[11px] text-emerald-300/80 font-mono">Server Control Room</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Monitor Hallway CCTV</div>
+            </button>
+
+            <!-- Room 6: Reactor -->
+            <button class="room-btn text-left p-4 rounded-2xl bg-slate-800/90 border-2 border-orange-500/50 hover:border-orange-400 hover:bg-orange-950/30 transition-all duration-300 group relative" data-room="reactor">
+              <div class="text-orange-400 text-2xl mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-radiation"></i>
+              </div>
+              <div class="font-orbitron font-bold text-white text-base">REACTOR</div>
+              <div class="text-[11px] text-orange-300/80 font-mono">AI & High-Perf Lab</div>
+              <div class="text-[10px] text-slate-400 mt-2 font-mono">Task: Unlock Manifolds (1-10)</div>
+            </button>
+
+          </div>
+
+          <!-- Bottom Status Bar -->
+          <div class="mt-6 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400">
+            <span>📍 CAMPUS COORD: 23.2599° N, 77.4126° E (BHOPAL)</span>
+            <span class="text-amber-400">SYSTEM: SPARK TELEMETRY V2.4</span>
+          </div>
+        </div>
+
+        <!-- Room Detail Sidebar Panel -->
+        <div id="roomDetailPanel" class="lg:col-span-4 bg-slate-900/90 border-2 border-slate-700/80 rounded-3xl p-6 backdrop-blur-xl shadow-2xl relative">
+          <!-- Room dynamic info will populate here -->
+          <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+            <div>
+              <span id="roomTag" class="text-[10px] font-orbitron font-bold text-red-400 tracking-widest uppercase">HAZARD LEVEL: DANGEROUS</span>
+              <h3 id="roomTitle" class="text-2xl font-orbitron font-black text-white">ELECTRICAL</h3>
+            </div>
+            <div id="roomIconBox" class="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xl">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+          </div>
+
+          <p id="roomDesc" class="text-slate-300 text-sm leading-relaxed mb-6">
+            Located in the Robotics & Automation Lab. The most infamous death trap in the fleet! Impostors frequently disable the campus power grid here. Always enter with a buddy.
+          </p>
+
+          <div class="space-y-3 font-mono text-xs">
+            <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between">
+              <span class="text-slate-400">IRL Assigned Task:</span>
+              <span id="roomTaskName" class="font-bold text-cyan-400">Fix 4-Wire Circuit</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between">
+              <span class="text-slate-400">Task Hardware:</span>
+              <span id="roomHardware" class="font-bold text-amber-400">Arduino Uno + Relay</span>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-center justify-between">
+              <span class="text-slate-400">Vent Connection:</span>
+              <span id="roomVent" class="font-bold text-red-400">Direct to MedBay & Security</span>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button id="simulateTaskBtn" class="w-full bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-orbitron font-bold text-xs py-3 rounded-xl border border-red-400 shadow-lg shadow-red-600/30 transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-play"></i>
+              <span>TEST THIS TASK IN TERMINAL</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Interactive Crewmate Customizer Lab -->
+  <section id="customizer" class="relative z-20 py-20 px-4 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-amber-400 font-orbitron text-xs font-bold tracking-widest uppercase">SPARK GENETICS & WARDROBE LAB</span>
+      <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-2">
+        CUSTOMIZE YOUR CREWMATE
+      </h2>
+      <p class="text-slate-300 mt-3 text-sm">
+        Choose your suit color, equip specialized headgear, and test your role card for the live event!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl">
+      
+      <!-- Left: Interactive Character Avatar Viewer -->
+      <div class="lg:col-span-5 flex flex-col items-center justify-center p-8 bg-slate-950/80 rounded-2xl border border-slate-800/80 relative overflow-hidden group">
+        
+        <!-- Cosmic glow background behind avatar -->
+        <div id="avatarGlow" class="absolute w-64 h-64 rounded-full bg-red-600/20 blur-3xl transition-colors duration-500 pointer-events-none"></div>
+
+        <!-- Floating Tag -->
+        <div class="mb-4 text-center">
+          <span id="avatarNameBadge" class="bg-red-600/20 border border-red-500/50 text-red-300 font-orbitron font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">
+            RED CREWMATE
+          </span>
+        </div>
+
+        <!-- SVG Crewmate Canvas Container -->
+        <div id="characterPreviewContainer" class="w-56 h-64 relative flex items-center justify-center transform transition-transform duration-300 group-hover:scale-105">
+          <!-- Main SVG Crewmate (Rendered via JS with Hat + Color) -->
+        </div>
+
+        <!-- Role Inspector Flip Card -->
+        <div class="mt-6 w-full max-w-xs">
+          <button id="inspectRoleBtn" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-orbitron text-xs font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg">
+            <i class="fa-solid fa-eye text-cyan-400"></i>
+            <span id="roleBtnText">REVEAL SECRET ROLE</span>
+          </button>
+          
+          <div id="roleRevealBox" class="hidden mt-3 p-3 rounded-xl text-center border font-orbitron font-bold text-xs transition-all">
+            <!-- Injected role -->
+          </div>
+        </div>
+
+        <!-- Action Sound Trigger -->
+        <button id="characterSqueakBtn" class="mt-3 text-xs font-mono text-slate-400 hover:text-cyan-400 flex items-center gap-1.5 transition-colors">
+          <i class="fa-solid fa-music"></i> Squeak / Step
+        </button>
+      </div>
+
+      <!-- Right: Color Palette & Hat Accessories Controls -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- 1. Color Palette -->
+        <div>
+          <label class="block font-orbitron font-bold text-xs uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-palette text-amber-400"></i>
+            <span>Select Suit Pigment (12 Standard Colors)</span>
+          </label>
+          <div id="colorSwatches" class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+            <!-- Dynamically populated color buttons -->
+          </div>
+        </div>
+
+        <!-- 2. Hat Selector -->
+        <div>
+          <label class="block font-orbitron font-bold text-xs uppercase tracking-wider text-slate-300 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-hat-wizard text-cyan-400"></i>
+            <span>Equip Headgear / Accessories</span>
+          </label>
+          <div id="hatSelector" class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <!-- Dynamically populated hat buttons -->
+          </div>
+        </div>
+
+        <!-- 3. Character Ejection Simulator Preview -->
+        <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800 flex items-center justify-between">
+          <div>
+            <div class="font-orbitron font-bold text-xs text-white uppercase">Ejection Preview</div>
+            <div class="text-[11px] text-slate-400 font-mono">Test how your crewmate looks when voted out</div>
+          </div>
+          <button id="simulateEjectionBtn" class="bg-red-600 hover:bg-red-500 text-white font-orbitron text-xs font-bold px-4 py-2 rounded-lg border border-red-400 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-angles-right"></i> EJECT ME!
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 5: Interactive Task Terminal (Playable Mini-Games) -->
+  <section id="task-terminal" class="relative z-20 py-20 px-4 bg-slate-950/70 border-y border-slate-800">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-lime-400 font-orbitron text-xs font-bold tracking-widest uppercase">TRAINING SIMULATION</span>
+        <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-1">
+          CREWMATE TASK TERMINAL
+        </h2>
+        <p class="text-slate-300 text-sm mt-3">
+          Practice the actual game tasks before November 9th! Complete all 3 tasks to unlock the Master Clearance code.
+        </p>
+      </div>
+
+      <!-- Task Tabs Navigation -->
+      <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mb-8 font-orbitron text-xs font-bold">
+        <button class="task-tab-btn px-5 py-3 rounded-xl border border-red-500/50 bg-red-600 text-white shadow-lg shadow-red-600/20 flex items-center gap-2 transition-all active:scale-95" data-task="wires">
+          <i class="fa-solid fa-network-wired"></i> 1. FIX WIRING
+        </button>
+        <button class="task-tab-btn px-5 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-cyan-400 flex items-center gap-2 transition-all active:scale-95" data-task="card">
+          <i class="fa-solid fa-credit-card"></i> 2. SWIPE CARD
+        </button>
+        <button class="task-tab-btn px-5 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-amber-400 flex items-center gap-2 transition-all active:scale-95" data-task="manifolds">
+          <i class="fa-solid fa-arrow-down-1-9"></i> 3. UNLOCK MANIFOLDS
+        </button>
+        <button class="task-tab-btn px-5 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-emerald-400 flex items-center gap-2 transition-all active:scale-95" data-task="medbay">
+          <i class="fa-solid fa-heart-pulse"></i> 4. MEDBAY SCAN
+        </button>
+      </div>
+
+      <!-- Main Playable Mini-Game Container -->
+      <div class="max-w-3xl mx-auto bg-slate-900/90 border-2 border-slate-700 rounded-3xl p-6 sm:p-8 backdrop-blur-2xl shadow-2xl relative min-h-[420px] flex flex-col justify-between">
+        
+        <!-- Task Header Banner -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+          <div class="flex items-center gap-3">
+            <span class="w-3 h-3 rounded-full bg-lime-400 animate-pulse"></span>
+            <div>
+              <h3 id="currentTaskTitle" class="font-orbitron font-black text-lg sm:text-xl text-white">FIX WIRING (ELECTRICAL)</h3>
+              <p id="currentTaskHint" class="text-xs text-slate-400 font-mono">Connect matching colored terminals on both sides</p>
+            </div>
+          </div>
+          <div class="text-right font-mono">
+            <span class="text-[10px] text-slate-500 block uppercase">TASK STATUS</span>
+            <span id="currentTaskBadge" class="text-xs font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/30">
+              INCOMPLETE
+            </span>
+          </div>
+        </div>
+
+        <!-- Task Dynamic Stage -->
+        <div id="taskStage" class="flex-1 flex items-center justify-center relative select-none">
+          <!-- Mini game rendered here -->
+        </div>
+
+        <!-- Task Footer Progress -->
+        <div class="mt-6 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between text-xs font-mono text-slate-400">
+          <div class="flex items-center gap-2">
+            <span>Overall Training Progress:</span>
+            <span id="overallTasksCompleted" class="text-cyan-400 font-bold">0 / 4 Complete</span>
+          </div>
+          <button id="resetTaskBtn" class="text-slate-400 hover:text-amber-400 flex items-center gap-1 transition-colors">
+            <i class="fa-solid fa-rotate-right"></i> Reset Task
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 6: Official Survival Rules & Event Mechanics -->
+  <section id="rules" class="relative z-20 py-20 px-4 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="text-red-400 font-orbitron text-xs font-bold tracking-widest uppercase">ENGAGEMENT DIRECTIVES</span>
+      <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-1">
+        SURVIVAL RULES: REAL LIFE
+      </h2>
+      <p class="text-slate-300 text-sm mt-3">
+        Rules must be strictly adhered to during the live campus event on 9th November 2026.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Crewmate Rules -->
+      <div class="bg-slate-900/70 border-2 border-cyan-500/40 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/50 flex items-center justify-center text-cyan-400 text-xl font-black">
+            <i class="fa-solid fa-user-astronaut"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-orbitron font-black text-cyan-400">CREWMATE PROTOCOL</h3>
+            <span class="text-[11px] font-mono text-slate-400">Win Condition: Complete All Tasks OR Eject All Impostors</span>
+          </div>
+        </div>
+
+        <ul class="space-y-4 text-sm text-slate-300">
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">PHYSICAL RFID TASK CHECKPOINTS:</strong>
+              Carry your SPARK Clearance Badge. Scan at designated Arduino stations across IIIT Bhopal campus to validate tasks.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">DEAD BODY REPORTING:</strong>
+              If you find a eliminated crewmate with their red marker placed down, loudly shout "DEAD BODY!" and notify a SPARK Proctor or hit the nearest buzzer.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">GHOST SILENCE PROTOCOL:</strong>
+              Eliminated players become Ghosts. You may NOT speak, gesture, or assist living crewmates, but must complete your remaining tasks to help the win bar!
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-circle-check text-cyan-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">NO PHYSICAL VIOLENCE:</strong>
+              All eliminations are contactless via assigned RFID / NFC tags and sticker tap mechanics.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Impostor Rules -->
+      <div class="bg-slate-900/70 border-2 border-red-500/40 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-xl pointer-events-none"></div>
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-500 text-xl font-black">
+            <i class="fa-solid fa-skull-crossbones"></i>
+          </div>
+          <div>
+            <h3 class="text-xl font-orbitron font-black text-red-500">IMPOSTOR PROTOCOL</h3>
+            <span class="text-[11px] font-mono text-slate-400">Win Condition: Match Crewmate Headcount OR Reactor Sabotage</span>
+          </div>
+        </div>
+
+        <ul class="space-y-4 text-sm text-slate-300">
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">STEALTH ELIMINATION:</strong>
+              Tag a crewmate on the shoulder when isolated without witnesses. Hand them the "ELIMINATED" marker card.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">SABOTAGE PROTOCOLS:</strong>
+              Impostors can trigger automated campus emergency alarms (Lights Off, Oxygen Depletion, Reactor Meltdown) via the SPARK mobile terminal.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">KILL COOLDOWN:</strong>
+              Impostor digital scanners enforce a 45-second mandatory cooldown timer between eliminations.
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <i class="fa-solid fa-triangle-exclamation text-red-400 mt-1 shrink-0"></i>
+            <div>
+              <strong class="text-white block font-orbitron text-xs">VENT ROAMING:</strong>
+              Designated secret pathways and stairwells marked as "VENTS" are accessible ONLY to confirmed Impostor passes!
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section 7: Mission Registration & Boarding Pass Generator -->
+  <section id="register" class="relative z-20 py-20 px-4 bg-slate-950/80 border-t border-slate-800">
+    <div class="max-w-5xl mx-auto">
+      <div class="text-center max-w-3xl mx-auto mb-14">
+        <span class="text-cyan-400 font-orbitron text-xs font-bold tracking-widest uppercase">OFFICIAL REGISTRATION</span>
+        <h2 class="text-3xl sm:text-5xl font-orbitron font-black text-white mt-1">
+          ISSUE CREW CLEARANCE PASS
+        </h2>
+        <p class="text-slate-300 text-sm mt-3">
+          Enter your details below to register your customized crewmate for the IIIT Bhopal Real Life Among Us tournament on November 22, 2026.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Registration Form -->
+        <div class="lg:col-span-6 bg-slate-900/80 border border-slate-700 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
+          <form id="registrationForm" class="space-y-4">
+            
+            <div>
+              <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">Full Cadet Name</label>
+              <input type="text" id="regName" required placeholder="e.g. Aryan Sharma" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-sans transition-colors" />
+            </div>
+
+            <div>
+              <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">Crew Nickname</label>
+              <input type="text" id="regNickname" required placeholder="e.g. AmongStar42" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-sans transition-colors" />
+            </div>
+
+            <div>
+              <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">College Email ID</label>
+              <input type="email" id="regEmail" required placeholder="e.g. 2024bcse042@iiitbhopal.ac.in" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-sans transition-colors" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">Roll / Scholar No.</label>
+                <input type="text" id="regRoll" required placeholder="e.g. 2024BCSE042" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-mono transition-colors uppercase" />
+              </div>
+              <div>
+                <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">Branch / Dept</label>
+                <select id="regBranch" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-sans transition-colors">
+                  <option value="CSE">CSE (Computer Science)</option>
+                  <option value="IT">IT (Information Tech)</option>
+                  <option value="ECE">ECE (Electronics & Comm)</option>
+                  <option value="AIML">AI & Data Science</option>
+                  <option value="OTHER">Other Department</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-orbitron text-xs font-bold text-slate-300 mb-1.5 uppercase">Contact / Discord ID</label>
+              <input type="text" id="regContact" required placeholder="e.g. crewmate#1234 or +91 9876543210" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-cyan-400 font-sans transition-colors" />
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" class="w-full bg-gradient-to-r from-cyan-500 via-blue-600 to-cyan-500 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-orbitron font-black text-sm py-3.5 rounded-xl border border-cyan-300 shadow-xl shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                <i class="fa-solid fa-user-check"></i>
+                <span>CONFIRM & REGISTER CREWMATE</span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- Live Selected Customized Crewmate Display -->
+        <div class="lg:col-span-6 flex flex-col items-center justify-center">
+          
+          <div id="selectedCrewmateCard" class="w-full max-w-md bg-gradient-to-b from-slate-900/95 via-slate-950/95 to-slate-900/95 border-2 border-cyan-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-center backdrop-blur-xl transition-all duration-300">
+            
+            <!-- Dynamic Color Glow behind the crewmate -->
+            <div id="selectedCrewmateGlow" class="absolute inset-0 m-auto w-64 h-64 rounded-full bg-red-600/20 blur-3xl pointer-events-none transition-colors duration-500"></div>
+
+            <!-- Top Header Badge -->
+            <div class="relative z-10 mb-3 flex flex-col items-center">
+              <span class="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-3 py-1 rounded-full uppercase tracking-widest font-bold inline-flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                <span>SELECTED CREWMATE</span>
+              </span>
+              <h3 id="selectedCrewmateName" class="text-2xl sm:text-3xl font-orbitron font-black text-white mt-2.5 tracking-wide uppercase drop-shadow">
+                RED CREWMATE
+              </h3>
+              <span id="selectedCrewmateHat" class="text-xs font-mono text-slate-400 mt-1">
+                EQUIPPED: Plant Sprout
+              </span>
+            </div>
+
+            <!-- Customized Crewmate SVG Display -->
+            <div class="relative z-10 w-64 h-72 sm:w-72 sm:h-80 mx-auto flex items-center justify-center my-2 p-2 group cursor-pointer" title="Click to squeak!">
+              <div id="selectedCrewmateAvatar" class="w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-105 active:scale-95 drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]">
+                <!-- Injected Live Selected SVG Crewmate -->
+              </div>
+            </div>
+
+            <!-- Cadet Assignment Info Strip -->
+            <div class="relative z-10 mt-3 bg-slate-950/90 border border-slate-800 rounded-2xl p-3.5 flex items-center justify-between text-left font-mono text-xs shadow-inner">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 text-base">
+                  <i class="fa-solid fa-user-astronaut"></i>
+                </div>
+                <div>
+                  <span class="text-[9px] text-slate-500 block uppercase font-orbitron">Assigned Cadet</span>
+                  <span id="selectedCadetDisplay" class="font-bold text-white text-sm font-sans truncate">CADET RECRUIT</span>
+                  <span id="selectedNicknameDisplay" class="hidden text-[11px] text-cyan-400 font-mono mt-0.5 block"></span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[9px] text-slate-500 block uppercase font-orbitron">Status</span>
+                <span class="text-emerald-400 font-bold uppercase tracking-wider text-[11px] flex items-center gap-1 justify-end">
+                  <i class="fa-solid fa-circle-check text-[10px]"></i>
+                  <span>READY</span>
+                </span>
+                <span id="selectedEmailDisplay" class="hidden text-[10px] text-slate-400 font-mono mt-1 block truncate max-w-[120px]"></span>
+              </div>
+            </div>
+
+            <!-- Quick Color Palettes -->
+            <div class="relative z-10 mt-5 pt-4 border-t border-slate-800/80">
+              <div class="flex items-center justify-between mb-2.5">
+                <span class="text-[10px] font-orbitron text-slate-400 tracking-wider uppercase font-bold">
+                  Quick Select Suit Color:
+                </span>
+                <a href="#customizer" class="text-[10px] font-orbitron text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1">
+                  <span>Open Full Lab</span>
+                  <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                </a>
+              </div>
+              <div id="passColorSwatches" class="flex flex-wrap items-center justify-center gap-2">
+                <!-- Dynamically populated quick color buttons -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 8: About SPARK Society of IIIT Bhopal -->
+  <section id="about-spark" class="relative z-20 py-20 px-4 max-w-7xl mx-auto">
+    <div class="bg-gradient-to-r from-slate-900/90 via-slate-950/90 to-slate-900/90 border-2 border-amber-500/40 rounded-3xl p-8 sm:p-12 backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+      
+      <div class="absolute -top-16 -right-16 w-60 h-60 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-orbitron uppercase mb-3">
+            <i class="fa-solid fa-atom"></i>
+            <span>HOST ORGANIZERS</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-orbitron font-black text-white mb-2">
+            ABOUT "SPARK" SOCIETY
+          </h2>
+          <div class="text-sm font-orbitron text-amber-400 font-bold mb-4 tracking-wider">
+            Programming • Automation • Research • Robotics • Knowledge
+          </div>
+          <p class="text-slate-300 text-sm leading-relaxed mb-4">
+            <strong>SPARK</strong> is the premier technical and engineering society of the <strong>Indian Institute of Information Technology (IIIT) Bhopal</strong>. 
+            We spearhead competitive programming bootcamps, automated robotics deployments, IoT hardware hackathons, and cutting-edge research initiatives.
+          </p>
+          <p class="text-slate-400 text-xs leading-relaxed">
+            For the "Real Live Among Us" event, our robotics and automation teams have designed custom micro-controller stations, wireless RFID badges, automated alert lighting systems, and live telemetry tracking to simulate the game with absolute physical realism.
+          </p>
+
+          <div class="mt-6 flex flex-wrap gap-4 text-xs font-orbitron font-bold">
+            <div class="flex items-center gap-2 text-cyan-400">
+              <i class="fa-solid fa-microchip"></i> Hardware Tasks
+            </div>
+            <div class="flex items-center gap-2 text-amber-400">
+              <i class="fa-solid fa-robot"></i> Embedded Sensors
+            </div>
+            <div class="flex items-center gap-2 text-red-400">
+              <i class="fa-solid fa-shield"></i> Cyber Threat Simulation
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 flex flex-col items-center justify-center p-6 bg-slate-950/70 border border-slate-800 rounded-2xl text-center">
+          <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-amber-500 to-red-500 p-1 flex items-center justify-center mb-4 shadow-lg shadow-amber-500/20">
+            <div class="w-full h-full bg-slate-950 rounded-xl flex items-center justify-center text-amber-400 text-3xl font-black">
+              ⚡
+            </div>
+          </div>
+          <h4 class="font-orbitron font-black text-white text-lg">SPARK IIIT BHOPAL</h4>
+          <span class="text-xs text-slate-400 font-mono mt-1">Official Technical Society</span>
+
+          <div class="mt-6 w-full space-y-2">
+            <a href="https://iiitbhopal.ac.in" target="_blank" class="block w-full py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 font-orbitron text-xs rounded-lg border border-slate-700 transition-colors">
+              <i class="fa-solid fa-globe mr-1"></i> IIIT Bhopal Official
+            </a>
+            <div class="text-[10px] text-slate-500 font-mono pt-2">
+              VENUE: IIIT Bhopal Campus, Madhya Pradesh, India
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Emergency Meeting Modal Overlay -->
+  <div id="emergencyModal" class="fixed inset-0 z-50 bg-red-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+    
+    <!-- Red Alert Sirens & Flashing Lights Effect -->
+    <div class="absolute inset-0 bg-red-600/20 animate-pulse pointer-events-none"></div>
+    <div class="absolute top-0 inset-x-0 h-4 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 bg-[length:40px_40px] opacity-80"></div>
+    <div class="absolute bottom-0 inset-x-0 h-4 bg-gradient-to-r from-yellow-400 via-black to-yellow-400 bg-[length:40px_40px] opacity-80"></div>
+
+    <div class="relative z-10 max-w-xl w-full text-center space-y-6">
+      
+      <!-- Big Loud Animated Siren -->
+      <div class="relative inline-block">
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-red-600 border-4 border-yellow-400 flex items-center justify-center text-white text-4xl sm:text-5xl shadow-[0_0_50px_rgba(239,68,68,0.9)] animate-bounce mx-auto">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-4xl sm:text-6xl font-retro text-yellow-300 tracking-wider uppercase drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+          EMERGENCY<br>MEETING!
+        </h2>
+        <p class="text-white font-orbitron font-bold text-sm sm:text-base mt-2 tracking-widest uppercase">
+          REPORTED BY: SPARK CHIEF PROCTOR
+        </p>
+      </div>
+
+      <div class="bg-slate-950/90 border-2 border-red-500/80 rounded-2xl p-6 text-left space-y-3 font-mono text-xs sm:text-sm">
+        <div class="flex items-center justify-between text-slate-300">
+          <span>EVENT:</span>
+          <span class="text-red-400 font-bold">REAL LIVE AMONG US 2026</span>
+        </div>
+        <div class="flex items-center justify-between text-slate-300">
+          <span>LOCATION:</span>
+          <span class="text-yellow-400 font-bold">IIIT BHOPAL CAMPUS</span>
+        </div>
+        <div class="flex items-center justify-between text-slate-300">
+          <span>TIME:</span>
+          <span class="text-cyan-400 font-bold">9TH NOVEMBER 2026, 7:00 PM</span>
+        </div>
+        <div class="pt-2 border-t border-slate-800 text-slate-400 text-center">
+          All living crew members must report to the Central Courtyard immediately for voting deliberations!
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-4">
+        <button id="closeEmergencyBtn" class="bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-orbitron font-black text-xs sm:text-sm px-8 py-3.5 rounded-xl border border-yellow-200 shadow-xl shadow-yellow-400/30 transition-all uppercase active:scale-95">
+          RETURN TO POST (CLOSE)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Fullscreen Ejection Animation Overlay -->
+  <div id="ejectionOverlay" class="fixed inset-0 z-50 bg-black/95 flex flex-col items-center justify-center transition-all duration-500 opacity-0 pointer-events-none">
+    
+    <!-- Canvas for tumbling astronaut -->
+    <div id="ejectedAstronautContainer" class="w-36 h-36 relative animate-eject">
+      <!-- Ejected character SVG -->
+    </div>
+
+    <!-- Ejection Text typewriter -->
+    <div class="mt-8 text-center max-w-lg px-4">
+      <div id="ejectionMainText" class="text-xl sm:text-2xl font-retro text-white tracking-widest">
+        ...
+      </div>
+      <div id="ejectionSubText" class="text-sm font-retro text-slate-400 mt-4 tracking-wider">
+        ...
+      </div>
+    </div>
+
+    <button id="closeEjectionBtn" class="mt-12 bg-slate-900 hover:bg-slate-800 text-slate-300 font-orbitron text-xs font-bold py-2 px-6 rounded-lg border border-slate-700">
+      Skip Ejection
+    </button>
+  </div>
+
+  <!-- Footer -->
+  <footer class="relative z-20 bg-slate-950 border-t border-slate-800/80 py-12 px-4 text-center font-mono text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col items-center gap-6">
+      
+      <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-black">⚡</span>
+        <span class="font-orbitron font-bold text-white text-sm">SPARK - IIIT BHOPAL</span>
+      </div>
+
+      <p class="max-w-xl text-slate-500 leading-relaxed text-[11px]">
+        The Programming, Automation, Research, Robotics and Knowledge Society of the Indian Institute of Information Technology (IIIT) Bhopal. 
+        Theme inspired by Among Us by Innersloth LLC. Created for the official 2026 college live-action event.
+      </p>
+
+      <div class="flex items-center gap-6 text-slate-400 text-base">
+        <a href="#hero" class="hover:text-cyan-400 transition-colors" title="Back to Top"><i class="fa-solid fa-arrow-up"></i></a>
+        <a href="#campus-map" class="hover:text-cyan-400 transition-colors" title="Campus Map"><i class="fa-solid fa-map"></i></a>
+        <a href="#register" class="hover:text-cyan-400 transition-colors" title="Register"><i class="fa-solid fa-id-card"></i></a>
+      </div>
+
+      <div class="border-t border-slate-900 w-full pt-6 text-[10px] text-slate-600">
+        © 2026 SPARK IIIT Bhopal. All rights reserved. Do not vent in public areas.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Modular Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/space.js"></script>
+  <script src="js/crewmates.js"></script>
+  <script src="js/intro.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
